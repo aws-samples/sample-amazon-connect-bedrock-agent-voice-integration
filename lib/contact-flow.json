@@ -1,0 +1,177 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "78c05a45-3e36-49b0-8a92-64c62ab6be19",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": -494.4,
+      "y": 35.2
+    },
+    "ActionMetadata": {
+      "78c05a45-3e36-49b0-8a92-64c62ab6be19": {
+        "position": {
+          "x": -357.6,
+          "y": 34.4
+        }
+      },
+      "e93ad318-5a23-4371-9325-3c07bfc08bb8": {
+        "position": {
+          "x": -62.4,
+          "y": 31.2
+        },
+        "children": ["c5d5276d-4ea5-4940-8cae-aba8ad89061b"],
+        "overrideConsoleVoice": false,
+        "fragments": {
+          "SetContactData": "c5d5276d-4ea5-4940-8cae-aba8ad89061b"
+        },
+        "overrideLanguageAttribute": true
+      },
+      "c5d5276d-4ea5-4940-8cae-aba8ad89061b": {
+        "position": {
+          "x": -62.4,
+          "y": 31.2
+        },
+        "dynamicParams": []
+      },
+      "bdedb309-e754-45a3-8a93-069573122b43": {
+        "position": {
+          "x": 240,
+          "y": 373.6
+        }
+      },
+      "8c4d3952-4f5f-44fe-bb1f-a8490a7d5563": {
+        "position": {
+          "x": 232,
+          "y": 39.2
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "TestBotAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "{{BotName}}"
+            }
+          },
+          "LexSessionAttributes": {
+            "phone-number": {
+              "useDynamic": true
+            }
+          }
+        },
+        "dynamicMetadata": {
+          "x-amz-lex:audio:start-timeout-ms:*:*": false,
+          "phone-number": true
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "{{BotName}}",
+        "lexV2BotAliasName": "TestBotAlias",
+        "conditionMetadata": []
+      },
+      "1c774610-b498-4889-99ec-456d3463a1b8": {
+        "position": {
+          "x": 588,
+          "y": 107.2
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "AssistantFlow",
+    "description": "",
+    "type": "contactFlow",
+    "status": "PUBLISHED",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "78c05a45-3e36-49b0-8a92-64c62ab6be19",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "e93ad318-5a23-4371-9325-3c07bfc08bb8"
+      }
+    },
+    {
+      "Parameters": {
+        "TextToSpeechVoice": "Amy"
+      },
+      "Identifier": "e93ad318-5a23-4371-9325-3c07bfc08bb8",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Transitions": {
+        "NextAction": "c5d5276d-4ea5-4940-8cae-aba8ad89061b",
+        "Errors": [
+          {
+            "NextAction": "bdedb309-e754-45a3-8a93-069573122b43",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "LanguageCode": "en-GB"
+      },
+      "Identifier": "c5d5276d-4ea5-4940-8cae-aba8ad89061b",
+      "Type": "UpdateContactData",
+      "Transitions": {
+        "NextAction": "8c4d3952-4f5f-44fe-bb1f-a8490a7d5563",
+        "Errors": [
+          {
+            "NextAction": "bdedb309-e754-45a3-8a93-069573122b43",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "Something went wrong"
+      },
+      "Identifier": "bdedb309-e754-45a3-8a93-069573122b43",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "1c774610-b498-4889-99ec-456d3463a1b8",
+        "Errors": [
+          {
+            "NextAction": "1c774610-b498-4889-99ec-456d3463a1b8",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "Hi, I'm here to help you book a trusted tradesperson.",
+        "LexV2Bot": {
+          "AliasArn": "{{BotAliasArn}}"
+        },
+        "LexSessionAttributes": {
+          "x-amz-lex:audio:start-timeout-ms:*:*": "9000",
+          "x-amz-lex:allow-interrupt:*:*": "False",
+          "phone-number": "$.CustomerEndpoint.Address"
+        }
+      },
+      "Identifier": "8c4d3952-4f5f-44fe-bb1f-a8490a7d5563",
+      "Type": "ConnectParticipantWithLexBot",
+      "Transitions": {
+        "NextAction": "bdedb309-e754-45a3-8a93-069573122b43",
+        "Errors": [
+          {
+            "NextAction": "1c774610-b498-4889-99ec-456d3463a1b8",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "bdedb309-e754-45a3-8a93-069573122b43",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "1c774610-b498-4889-99ec-456d3463a1b8",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    }
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TradesPersons Booking API",
+    "version": "1.0.0",
+    "description": "API for managing tradesPersons bookings. All API inputs must be in English language only except for customer name"
+  },
+  "paths": {
+    "/register-customer": {
+      "post": {
+        "operationId": "registerCustomer",
+        "summary": "Register a new customer",
+        "description": "Register a new customer. city input value must be in English only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "city"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Customer full name"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Customer city (English only)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Customer registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "name": { "type": "string" },
+                    "city": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-customer-details": {
+      "get": {
+        "operationId": "getCustomerDetails",
+        "summary": "Get Customer Details",
+        "description": "Get Customer Details",
+        "responses": {
+          "200": {
+            "description": "Customer details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "booking": {
+                      "type": "object",
+                      "properties": {
+                        "customerId": { "type": "string" },
+                        "name": { "type": "string" },
+                        "city": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-current-datetime": {
+      "get": {
+        "operationId": "getCurrentDateTime",
+        "summary": "Get the current date and time",
+        "description": "Returns the current date and time to help with relative date calculations",
+        "responses": {
+          "200": {
+            "description": "Current date and time information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentDateTime": { "type": "string" },
+                    "currentDateTimeISO": { "type": "string" },
+                    "currentTimestamp": { "type": "number" },
+                    "formattedDate": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search-trades-persons": {
+      "post": {
+        "operationId": "searchTradesPersons",
+        "summary": "Search for tradesPersons based on their trade and city, only accept english values",
+        "description": "Search for tradesPersons based on their trade and city, only accept english values",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["trade", "city"],
+                "properties": {
+                  "trade": {
+                    "type": "string",
+                    "description": "The trade they specialise it can only be plumber, carpenter or electrician, only accept english values"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "city they operate in, only accept english values"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of tradesPerson matching the criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tradesPersons": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tradesPersonId": { "type": "string" },
+                          "name": { "type": "string" },
+                          "trade": { "type": "string" },
+                          "hourlyRate": { "type": "number" },
+                          "city": { "type": "string" },
+                          "contactNumber": { "type": "string" }
+                        }
+                      }
+                    },
+                    "count": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-availability": {
+      "post": {
+        "operationId": "checkAvailability",
+        "summary": "Check tradesPerson availability within a specified time range (8:00 AM to 6:00 PM)",
+        "description": "Find available time slots for a tradesPerson within a specified date/time range, limited to working hours (8:00 AM to 6:00 PM)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["tradesPersonId", "startSlot", "endSlot"],
+                "properties": {
+                  "tradesPersonId": {
+                    "type": "string",
+                    "description": "ID of the tradesPerson"
+                  },
+                  "startSlot": {
+                    "type": "string",
+                    "description": "Start of time range to search for availability (DateTime in YYYY-MM-DDTHH:MM:SS format)"
+                  },
+                  "endSlot": {
+                    "type": "string",
+                    "description": "End of time range to search for availability (DateTime in YYYY-MM-DDTHH:MM:SS format)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Availabile Time Slots",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "availableTimeSlots": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-booking": {
+      "post": {
+        "operationId": "createBooking",
+        "summary": "Create a new booking for a tradesPerson",
+        "description": "Create a new booking for a tradesPerson",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["tradesPersonId", "timeSlot", "description"],
+                "properties": {
+                  "tradesPersonId": {
+                    "type": "string",
+                    "description": "ID of the tradesPerson"
+                  },
+                  "slot": {
+                    "type": "string",
+                    "description": "DateTime in YYYY-MM-DDTHH:MM:SS format"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the issue (English only)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "booking": {
+                      "type": "object",
+                      "properties": {
+                        "bookingId": { "type": "string" },
+                        "tradesPersonName": { "type": "string" },
+                        "slot": { "type": "string" },
+                        "description": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-latest-booking": {
+      "get": {
+        "operationId": "getLatestBookings",
+        "summary": "Get latest booking for a customer",
+        "description": "Get latest booking for a customer",
+        "responses": {
+          "200": {
+            "description": "Latest Booking details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "booking": {
+                      "type": "object",
+                      "properties": {
+                        "bookingId": { "type": "string" },
+                        "tradesPersonName": { "type": "string" },
+                        "tradesPersonTrade": { "type": "string" },
+                        "bookingDateTime": { "type": "string" },
+                        "description": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cancel-booking": {
+      "post": {
+        "operationId": "cancelBooking",
+        "summary": "Cancel an existing booking",
+        "description": "Cancel an existing booking",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["bookingId"],
+                "properties": {
+                  "bookingId": {
+                    "type": "string",
+                    "description": "ID of the booking to cancel"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking cancelled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "bookingId": { "type": "string" },
+                    "status": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-booking": {
+      "post": {
+        "operationId": "updateBooking",
+        "summary": "Update an existing booking with a new time slot",
+        "description": "Reschedule an existing booking by updating its time slot",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["bookingId", "slot"],
+                "properties": {
+                  "bookingId": {
+                    "type": "string",
+                    "description": "ID of the booking to update"
+                  },
+                  "slot": {
+                    "type": "string",
+                    "description": "New date and time for the booking (DateTime in YYYY-MM-DDTHH:MM:SS format)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "bookingId": { "type": "string" },
+                    "tradesPersonName": { "type": "string" },
+                    "oldSlot": { "type": "string" },
+                    "newSlot": { "type": "string" },
+                    "description": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
