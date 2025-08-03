@@ -1,6 +1,7 @@
 # Amazon Connect + Bedrock Agent Integration Demo
 
-This project demonstrates how to integrate Amazon Connect with Amazon Bedrock Agent to build a generative AI-powered customer call center. The demo showcases a tradesperson booking assistant that helps callers find and book tradespeople through natural voice conversations.
+This project demonstrates how to integrate Amazon Connect with Amazon Bedrock Agent to build a generative AI-powered customer call center. The demo showcases a tradesperson booking assistant that helps callers find and book tradespeople through natural voice conversations. The solution accompanies this [blog post](https://builder.aws.com/content/2zx0dCEoXx0rB4z33jAzwSWAUOF/building-an-ai-powered-call-center-with-amazon-connect-and-bedrock-agent) on the AWS Builder Center.
+
 
 ## Overview
 
